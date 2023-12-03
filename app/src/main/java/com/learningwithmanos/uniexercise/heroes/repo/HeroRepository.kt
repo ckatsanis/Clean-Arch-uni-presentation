@@ -1,5 +1,8 @@
 package com.learningwithmanos.uniexercise.heroes.repo
 
+import androidx.core.app.ComponentActivity
+import com.learningwithmanos.uniexercise.database.MarvelDao
+import com.learningwithmanos.uniexercise.database.MarvelDatabase
 import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.source.local.HeroLocalSource
 import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSource
@@ -13,7 +16,7 @@ import javax.inject.Inject
  * A repository interface that is used to coordinate the usage of the LocalSource and the
  * RemoteSource.
  */
-interface HeroRepository {
+interface HeroRepository  {
 
     /**
      * In the scope of this method it is decided from which source the data should be retrieved from.
@@ -25,15 +28,16 @@ interface HeroRepository {
     suspend fun getHeroes(): Flow<List<Hero>>
 }
 
-class HeroRepositoryImpl @Inject constructor(
+class HeroRepositoryImpl @Inject constructor (
     private val heroRemoteSource: HeroRemoteSource,
     private val heroLocalSource: HeroLocalSource,
 ) : HeroRepository {
     @OptIn(ExperimentalCoroutinesApi::class)
-    override suspend fun getHeroes(): Flow<List<Hero>>  {
+    override suspend fun getHeroes(): Flow<List<Hero>> {
         return heroLocalSource.isHeroDataStored().flatMapLatest { isHeroDataStored ->
             if (!isHeroDataStored) {
-                val heroList = heroRemoteSource.getHeroes()
+
+                val heroList = MarvelRepo().dao.getAllHeroes()
                 heroLocalSource.storeHeroes(heroList)
                 flowOf(heroList)
             } else {

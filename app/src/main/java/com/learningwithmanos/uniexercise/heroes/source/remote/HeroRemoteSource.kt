@@ -11,15 +11,15 @@ interface HeroRemoteSource {
     /**
      * @return retrieves the a list of heroes from a certain endpoint
      */
-    suspend fun getHeroes(): List<Hero>
+    suspend fun getHeroes()
 }
 
 class HeroRemoteSourceImpl @Inject constructor(
     private val restFrameworkWrapper: DummyRestFrameworkWrapper,
 ): HeroRemoteSource {
 
-    override suspend fun getHeroes(): List<Hero> {
-        return restFrameworkWrapper.getHeroes()
+    override suspend fun getHeroes() {
+        restFrameworkWrapper.getHeroes()
     }
 
 }
