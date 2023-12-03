@@ -1,5 +1,6 @@
 package com.learningwithmanos.uniexercise.heroes.source.local
 
+import com.learningwithmanos.uniexercise.database.MarvelDao
 import com.learningwithmanos.uniexercise.heroes.data.Hero
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -12,6 +13,7 @@ interface DBWrapper {
 }
 
 class DummyDBWrapper @Inject constructor() : DBWrapper {
+    private lateinit var characterDao: MarvelDao
     override fun isHeroDataStored(): Flow<Boolean> {
         return flowOf(false)
     }
@@ -21,6 +23,6 @@ class DummyDBWrapper @Inject constructor() : DBWrapper {
     }
 
     override fun getHeroes(): Flow<List<Hero>> {
-        return flowOf(listOf())
+        return flowOf(characterDao.getAllHeroes())
     }
 }
