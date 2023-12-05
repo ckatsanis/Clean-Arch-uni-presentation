@@ -1,8 +1,5 @@
 package com.learningwithmanos.uniexercise.heroes.repo
 
-import androidx.core.app.ComponentActivity
-import com.learningwithmanos.uniexercise.database.MarvelDao
-import com.learningwithmanos.uniexercise.database.MarvelDatabase
 import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.source.local.HeroLocalSource
 import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSource
@@ -34,16 +31,15 @@ class HeroRepositoryImpl @Inject constructor (
 ) : HeroRepository {
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun getHeroes(): Flow<List<Hero>> {
-        return heroLocalSource.isHeroDataStored().flatMapLatest { isHeroDataStored ->
-            if (!isHeroDataStored) {
-
-                val heroList = MarvelRepo().dao.getAllHeroes()
+        return heroLocalSource.isEmpty().flatMapLatest { isEmpty ->
+            if (!isEmpty) {
+                val heroList = heroRemoteSource.getHeroes()
                 heroLocalSource.storeHeroes(heroList)
                 flowOf(heroList)
             } else {
                 heroLocalSource.getHeroes()
             }
-        }
+        } as Flow<List<Hero>>
     }
 
 }
