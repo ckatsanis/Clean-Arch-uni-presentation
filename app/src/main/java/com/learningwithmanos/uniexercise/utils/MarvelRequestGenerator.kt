@@ -10,8 +10,8 @@ class MarvelRequestGenerator private constructor(){
         }
     }
 
-    val apiKey: String = "API KEY"
-    val privateKey: String = "PrivateKey"
+    val apiKey: String = "0cf69d45e2482a87f2a9af138efba603"
+    val privateKey: String = "8aa649a8b299924f9428f6db08189950b7bfd728"
     var timestamp :Long? = null
     var hash: String? = null
 

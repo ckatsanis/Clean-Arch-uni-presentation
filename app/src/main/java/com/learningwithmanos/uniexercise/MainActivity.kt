@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.learningwithmanos.uniexercise.database.MarvelDao
-import com.learningwithmanos.uniexercise.database.MarvelDatabase
 import com.learningwithmanos.uniexercise.heroes.ui.HeroesScreen
 import com.learningwithmanos.uniexercise.theme.MyApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
