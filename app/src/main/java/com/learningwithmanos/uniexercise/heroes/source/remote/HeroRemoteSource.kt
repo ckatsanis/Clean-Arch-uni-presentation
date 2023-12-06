@@ -1,12 +1,14 @@
 package com.learningwithmanos.uniexercise.heroes.source.remote
 
 import com.learningwithmanos.uniexercise.heroes.data.Hero
+import com.learningwithmanos.uniexercise.heroes.data.HeroData
 import com.learningwithmanos.uniexercise.heroes.repo.MarvelRepo
 import com.learningwithmanos.uniexercise.heroes.response.MarvelCharacterResponse
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.migration.DisableInstallInCheck
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
@@ -25,10 +27,18 @@ class HeroRemoteSourceImpl @Inject constructor(
 ): HeroRemoteSource {
 
     override suspend fun getHeroes(): Flow<List<Hero>> {
-        val hero: Flow<List<Hero>>
+        var heroData: List<HeroData>
+        var hero: List<Hero>
         val response = restApi.getData()
+        var i: Int = 0
 
-        hero = response.dat
+        response.map {
+            while ( i < it.size) {
+                heroData = it[i].data
+                hero[i].also { heroData[i].results}
+                i++
+            }
+        }
 
         return hero
     }

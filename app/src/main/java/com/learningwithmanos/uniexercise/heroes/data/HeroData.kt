@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 data class HeroData (
     @SerializedName("results")
-    val results: List<Hero>? = null
+    val results: List<Hero>
 )
