@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.learningwithmanos.uniexercise.heroes.data.Hero
+import com.learningwithmanos.uniexercise.heroes.response.MarvelCharacterResponse
 import com.learningwithmanos.uniexercise.network.MarvelApi
 import com.learningwithmanos.uniexercise.network.MarvelApiClient
 import com.learningwithmanos.uniexercise.utils.MarvelRequestGenerator
@@ -17,10 +18,10 @@ import javax.inject.Inject
 private var params = MarvelRequestGenerator.createParams()
 private var client: MarvelApi = MarvelApiClient.api
 interface MarvelRepo  {
-    suspend fun getData(): Flow<List<Hero>>
+    suspend fun getData(): Flow<List<MarvelCharacterResponse>>
 }
 
 class MarvelRepoImpl @Inject constructor() : MarvelRepo {
 
-    override suspend fun getData(): Flow<List<Hero>> =   client.getCharacters(params.timestamp,params.apiKey, params.hash, 20, 0)
+    override suspend fun getData(): Flow<List<MarvelCharacterResponse>> =   client.getCharacters(params.timestamp,params.apiKey, params.hash, 20, 0)
 }
