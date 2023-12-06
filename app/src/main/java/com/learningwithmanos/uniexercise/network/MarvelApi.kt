@@ -20,18 +20,5 @@ interface MarvelApi {
         @Query("hash") hash: String?,
         @Query("limit") limit: Int?,
         @Query("offset") offset: Int?
-    ): Flow<List<Hero>>
-}
-
-class MarvelApiImp @Inject constructor() : MarvelApi {
-    override suspend fun getCharacters(
-        timestamp: Long?,
-        apiKey: String?,
-        hash: String?,
-        limit: Int?,
-        offset: Int?
-    ): Flow<List<Hero>> {
-        TODO("Not yet implemented")
-    }
-
+    ): Flow<List<MarvelCharacterResponse>>
 }

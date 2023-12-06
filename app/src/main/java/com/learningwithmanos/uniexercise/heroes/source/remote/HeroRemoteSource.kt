@@ -2,6 +2,7 @@ package com.learningwithmanos.uniexercise.heroes.source.remote
 
 import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.repo.MarvelRepo
+import com.learningwithmanos.uniexercise.heroes.response.MarvelCharacterResponse
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.migration.DisableInstallInCheck
@@ -24,8 +25,15 @@ class HeroRemoteSourceImpl @Inject constructor(
 ): HeroRemoteSource {
 
     override suspend fun getHeroes(): Flow<List<Hero>> {
-        return restApi.getData()
+        val hero: Flow<List<Hero>>
+        val response = restApi.getData()
+
+        hero = response.dat
+
+        return hero
     }
+
+    fun
 
 }
 

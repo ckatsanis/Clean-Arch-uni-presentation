@@ -1,9 +1,11 @@
 package com.learningwithmanos.uniexercise.heroes.response
 
-import com.learningwithmanos.uniexercise.heroes.data.HeroData
 import com.google.gson.annotations.SerializedName
+import com.learningwithmanos.uniexercise.heroes.data.Hero
+import com.learningwithmanos.uniexercise.heroes.data.HeroData
+import kotlinx.coroutines.flow.Flow
 
-class MarvelCharacterResponse(
+data class MarvelCharacterResponse(
     @SerializedName("code")
     var code: String? = null,
 
@@ -11,5 +13,5 @@ class MarvelCharacterResponse(
     var status: String? = null,
 
     @SerializedName("data")
-    var data: HeroData
+    var data: List<HeroData>
 )

@@ -29,23 +29,21 @@ interface HeroLocalSource {
     fun isEmpty(): Flow<Boolean>
 }
 
-class HeroLocalSourceImpl @Inject constructor(
-    private val dbDao: MarvelDao,
-): HeroLocalSource {
+class HeroLocalSourceImpl @Inject constructor(): HeroLocalSource {
     override fun isHeroDataStored(heroId: Int): Flow<Boolean> {
-        return flowOf(dbDao.isHeroDataStored(heroId))
+        return flowOf(false)
     }
 
     override fun storeHeroes(heroes: Flow<List<Hero>>) {
-        dbDao.insertCharacters(hero = heroes)
+
     }
 
     override fun getHeroes(): Flow<List<Hero>> {
-        return dbDao.getAllHeroes()
+        return flowOf()
     }
 
     override fun isEmpty(): Flow<Boolean> {
-        return flowOf(dbDao.isEmpty())
+        return flowOf(true)
     }
 
 }
