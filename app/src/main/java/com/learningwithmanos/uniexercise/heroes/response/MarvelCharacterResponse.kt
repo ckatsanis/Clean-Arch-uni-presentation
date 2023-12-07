@@ -13,5 +13,5 @@ data class MarvelCharacterResponse(
     var status: String? = null,
 
     @SerializedName("data")
-    var data: List<HeroData>
+    var data: HeroData
 )

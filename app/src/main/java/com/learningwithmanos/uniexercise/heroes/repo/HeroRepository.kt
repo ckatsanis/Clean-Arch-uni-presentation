@@ -39,7 +39,7 @@ class HeroRepositoryImpl @Inject constructor (
             } else {
                 heroLocalSource.getHeroes()
             }
-        } as Flow<List<Hero>>
+        }
     }
 
 }

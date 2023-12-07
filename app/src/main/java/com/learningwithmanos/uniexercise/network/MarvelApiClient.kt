@@ -22,7 +22,7 @@ object MarvelApiClient {
         .create(MarvelApi::class.java)
     }
 
-    suspend fun getCharacters(limit: Int, offset: Int): Flow<List<Hero>> {
+    suspend fun getCharacters(limit: Int, offset: Int): MarvelCharacterResponse {
         val generator = MarvelRequestGenerator.createParams()
         return api.getCharacters(generator.timestamp, generator.apiKey, generator.hash, limit, offset)
     }
