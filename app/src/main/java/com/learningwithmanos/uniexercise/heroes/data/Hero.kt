@@ -18,9 +18,9 @@ data class Hero(
 
     @ColumnInfo(name = "marvel_comics")
     @SerializedName("comics")
-    var availableComics: Int,
+    var availableComics: Comics,
 
     @ColumnInfo(name = "marvel_image")
     @SerializedName("thumbnail")
-    var imageUrl: String
+    var imageUrl: Thumbnail
 )
