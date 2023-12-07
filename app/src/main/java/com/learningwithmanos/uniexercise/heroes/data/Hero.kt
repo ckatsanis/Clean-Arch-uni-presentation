@@ -9,17 +9,17 @@ import com.google.gson.annotations.SerializedName
 data class Hero(
     @PrimaryKey
     @SerializedName("id")
-    val id: Int,
+    var id: Int,
 
     @ColumnInfo(name = "marvel_name")
     @SerializedName("name")
-    val name: String,
+    var name: String,
 
     @ColumnInfo(name = "marvel_comics")
     @SerializedName("comics")
-    val availableComics: Int,
+    var availableComics: Int,
 
     @ColumnInfo(name = "marvel_image")
-    @SerializedName("image")
-    val imageUrl: String
+    @SerializedName("thumbnail")
+    var imageUrl: String
 )

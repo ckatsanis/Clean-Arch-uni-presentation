@@ -18,10 +18,10 @@ import javax.inject.Inject
 private var params = MarvelRequestGenerator.createParams()
 private var client: MarvelApi = MarvelApiClient.api
 interface MarvelRepo  {
-    suspend fun getData(): Flow<List<MarvelCharacterResponse>>
+    suspend fun getData(): MarvelCharacterResponse
 }
 
 class MarvelRepoImpl @Inject constructor() : MarvelRepo {
 
-    override suspend fun getData(): Flow<List<MarvelCharacterResponse>> =   client.getCharacters(params.timestamp,params.apiKey, params.hash, 20, 0)
+    override suspend fun getData(): MarvelCharacterResponse =   client.getCharacters(params.timestamp,params.apiKey, params.hash, 20, 0)
 }

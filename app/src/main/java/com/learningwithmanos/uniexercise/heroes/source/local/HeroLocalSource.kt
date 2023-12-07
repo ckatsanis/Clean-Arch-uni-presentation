@@ -19,7 +19,7 @@ interface HeroLocalSource {
      * Stores a list of heroes to the local data storage
      * @param heroes list of heroes to be stored
      */
-    fun storeHeroes(heroes: Flow<List<Hero>>)
+    fun storeHeroes(heroes: List<Hero>)
 
     /**
      * @return the list of heroes stored at the local storage
@@ -34,7 +34,7 @@ class HeroLocalSourceImpl @Inject constructor(): HeroLocalSource {
         return flowOf(false)
     }
 
-    override fun storeHeroes(heroes: Flow<List<Hero>>) {
+    override fun storeHeroes(heroes: List<Hero>) {
 
     }
 
