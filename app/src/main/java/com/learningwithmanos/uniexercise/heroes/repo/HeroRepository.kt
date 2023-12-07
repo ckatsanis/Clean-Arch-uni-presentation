@@ -1,5 +1,6 @@
 package com.learningwithmanos.uniexercise.heroes.repo
 
+import android.util.Log
 import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.source.local.HeroLocalSource
 import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSource
@@ -32,7 +33,7 @@ class HeroRepositoryImpl @Inject constructor (
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun getHeroes(): Flow<List<Hero>> {
         return heroLocalSource.isEmpty().flatMapLatest { isEmpty ->
-            if (!isEmpty) {
+            if (isEmpty) {
                 val heroList = heroRemoteSource.getHeroes()
                 heroLocalSource.storeHeroes(heroList)
                 flowOf(heroList)

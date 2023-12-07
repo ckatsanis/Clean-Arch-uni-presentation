@@ -1,8 +1,10 @@
 package com.learningwithmanos.uniexercise.heroes.source.remote
 
+import android.util.Log
 import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.data.HeroData
 import com.learningwithmanos.uniexercise.heroes.repo.MarvelRepo
+import com.learningwithmanos.uniexercise.heroes.repo.MarvelRepoImpl
 import com.learningwithmanos.uniexercise.heroes.response.MarvelCharacterResponse
 import dagger.Module
 import dagger.Provides
@@ -23,7 +25,7 @@ interface HeroRemoteSource {
 }
 
 class HeroRemoteSourceImpl @Inject constructor(
-    private val restApi: MarvelRepo
+    private val restApi: MarvelRepoImpl
 ): HeroRemoteSource {
 
     override suspend fun getHeroes(): List<Hero> {
@@ -31,6 +33,7 @@ class HeroRemoteSourceImpl @Inject constructor(
         val response = restApi.getData()
 
         hero = response.data.results
+        Log.d(hero.toString(), "getHeroes: ")
 
         return hero
     }
