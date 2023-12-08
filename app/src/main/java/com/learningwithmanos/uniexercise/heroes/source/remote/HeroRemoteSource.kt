@@ -1,16 +1,7 @@
 package com.learningwithmanos.uniexercise.heroes.source.remote
 
-import android.util.Log
 import com.learningwithmanos.uniexercise.heroes.data.Hero
-import com.learningwithmanos.uniexercise.heroes.data.HeroData
-import com.learningwithmanos.uniexercise.heroes.repo.MarvelRepo
-import com.learningwithmanos.uniexercise.heroes.repo.MarvelRepoImpl
-import com.learningwithmanos.uniexercise.heroes.response.MarvelCharacterResponse
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.migration.DisableInstallInCheck
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import com.learningwithmanos.uniexercise.heroes.data.RHero
 import javax.inject.Inject
 
 /**
@@ -29,14 +20,19 @@ class HeroRemoteSourceImpl @Inject constructor(
 ): HeroRemoteSource {
 
     override suspend fun getHeroes(): List<Hero> {
-        var hero: List<Hero> = emptyList()
-        val response = restApi.getData()
-
-        hero = response.data.results
-        Log.d(hero.toString(), "getHeroes: ")
+        val hero: List<Hero> = restApi.getData().data.results.map {
+            it.mapToHero()
+        }
 
         return hero
     }
+
+    fun RHero.mapToHero() = Hero (
+        id = this.id,
+        name = this.name,
+        availableComics = this.availableComics,
+        imageUrl = this.imageUrl
+    )
 
 }
 

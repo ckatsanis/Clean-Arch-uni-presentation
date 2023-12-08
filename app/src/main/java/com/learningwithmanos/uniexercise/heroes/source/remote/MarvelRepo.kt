@@ -1,4 +1,4 @@
-package com.learningwithmanos.uniexercise.heroes.repo
+package com.learningwithmanos.uniexercise.heroes.source.remote
 
 import com.learningwithmanos.uniexercise.heroes.response.MarvelCharacterResponse
 import com.learningwithmanos.uniexercise.network.MarvelApi
@@ -14,5 +14,11 @@ interface MarvelRepo  {
 
 class MarvelRepoImpl @Inject constructor() : MarvelRepo {
 
-    override suspend fun getData(): MarvelCharacterResponse =   client.getCharacters(params.timestamp,params.apiKey, params.hash, 20, 0)
+    override suspend fun getData(): MarvelCharacterResponse =   client.getCharacters(
+        params.timestamp,
+        params.apiKey,
+        params.hash,
+        20,
+        0
+    )
 }

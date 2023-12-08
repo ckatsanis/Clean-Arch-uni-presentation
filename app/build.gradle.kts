@@ -76,7 +76,7 @@ dependencies {
     // tests
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:5.5.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
     // hilt
     implementation("com.google.dagger:hilt-android:2.48")
@@ -100,10 +100,20 @@ dependencies {
     implementation ("io.reactivex.rxjava2:rxandroid:2.1.1")
 
     //Room
-    implementation( "androidx.room:room-ktx:2.5.1")
-    implementation ("androidx.room:room-runtime:2.5.1")
+    implementation( "androidx.room:room-ktx:2.6.1")
+    implementation ("androidx.room:room-runtime:2.6.1")
+    kapt ("androidx.room:room-compiler:2.6.1")
 
     //Coroutines
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    //CircleImageView
+    implementation ("de.hdodenhof:circleimageview:3.0.1")
+
+    //Glide
+    implementation ("com.github.bumptech.glide:glide:4.10.0")
+
+    //Image COIL
+    implementation("io.coil-kt:coil-compose:2.5.0")
 }
