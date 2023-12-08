@@ -38,7 +38,7 @@ class HeroRepositoryImpl @Inject constructor (
                 heroLocalSource.storeHeroes(heroList)
                 flowOf(heroList)
             } else {
-                heroLocalSource.getHeroes()
+                flowOf(heroLocalSource.getHeroes())
             }
         }
     }

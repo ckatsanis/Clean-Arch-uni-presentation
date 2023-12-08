@@ -4,10 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.data.Tab
+import com.learningwithmanos.uniexercise.heroes.data.Thumbnail
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesSortedByHighestNumberOfComicsUC
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesSortedByNameUC
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesUC
+import com.learningwithmanos.uniexercise.utils.getThumbnail
+import com.learningwithmanos.uniexercise.utils.loadImage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -76,7 +80,7 @@ data class HeroTileModel(
 
 fun Hero.mapHeroToHeroTileModel(): HeroTileModel {
     return HeroTileModel(
-        title = "$name, comics - $availableComics",
-        imageUrl = imageUrl
+        title = "$name, comics - ${availableComics.availableComics}",
+        imageUrl = imageUrl.getThumbnail()// image view are implemented with coil jc
     )
 }
