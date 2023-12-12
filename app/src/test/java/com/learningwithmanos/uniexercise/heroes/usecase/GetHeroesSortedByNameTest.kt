@@ -34,7 +34,7 @@ class GetHeroesSortedByNameUCImplTest {
         // given
         val heroesList = heroRepositoryMock.getHeroes()
         given(heroRepositoryMock.getHeroes()).willReturn((heroesList))
-        val expectedHeroesList = sortHeroListByName(heroesList)
+        val expectedHeroesList = heroesList.map { list -> list.sortedBy { it.name } }
 
         // when
         getHeroesSortedByNameUCImpl.execute().collect { actual ->
@@ -43,9 +43,6 @@ class GetHeroesSortedByNameUCImplTest {
             verify(heroRepositoryMock).getHeroes()
         }
 
-    }
-    private fun sortHeroListByName(heroesList: Flow<List<Hero>>): List<Hero> {
-        return heroesList.sortedBy { heroesList.map { list -> list.map{ it.name }  }}
     }
 
 }

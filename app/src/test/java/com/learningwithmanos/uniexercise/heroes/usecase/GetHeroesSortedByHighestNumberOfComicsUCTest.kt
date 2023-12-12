@@ -35,7 +35,7 @@ class GetHeroesSortedByHighestNumberOfComicsUCImplTest {
         val heroesList = heroRepositoryMock.getHeroes()
 
         given(heroRepositoryMock.getHeroes()).willReturn(heroesList)
-        val expectedHeroesList = sortHeroListByComicsNumber(heroesList.map { it })
+        val expectedHeroesList = heroesList.map { list -> list.sortedByDescending { it.availableComics } }
 
         // when
         getHeroesSortedByHighestNumberOfComicsUCImpl.execute().collect { actual ->
@@ -43,10 +43,6 @@ class GetHeroesSortedByHighestNumberOfComicsUCImplTest {
             assertThat(actual, equalTo(expectedHeroesList))
             verify(heroRepositoryMock).getHeroes()
         }
-    }
-
-    private fun sortHeroListByComicsNumber(heroesList: Flow<List<Hero>>): List<Hero> {
-        return heroesList.sortedByDescending { heroesList.map { list -> list.map{ it.availableComics }  }}
     }
 
 }
