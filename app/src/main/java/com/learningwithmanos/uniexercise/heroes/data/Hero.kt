@@ -9,6 +9,6 @@ import com.google.gson.annotations.SerializedName
 data class Hero(
     var id: Int,
     var name: String,
-    var availableComics: Comics,
-    var imageUrl: Thumbnail
+    var availableComics: Int,
+    var imageUrl: String
 )

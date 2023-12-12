@@ -36,9 +36,9 @@ class HeroRepositoryImpl @Inject constructor (
             if (isEmpty) {
                 val heroList = heroRemoteSource.getHeroes()
                 heroLocalSource.storeHeroes(heroList)
-                flowOf(heroList)
+                flowOf((heroList))
             } else {
-                flowOf(heroLocalSource.getHeroes())
+                heroLocalSource.getHeroes()
             }
         }
     }
