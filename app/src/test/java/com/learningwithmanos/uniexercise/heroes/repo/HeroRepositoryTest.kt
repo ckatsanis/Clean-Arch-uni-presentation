@@ -6,6 +6,7 @@ import com.learningwithmanos.uniexercise.heroes.source.local.Converters
 import com.learningwithmanos.uniexercise.heroes.source.local.HeroLocalSource
 import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
@@ -16,8 +17,10 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.BDDMockito.given
 import org.mockito.BDDMockito.verifyNoMoreInteractions
+import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+import org.mockito.stubbing.OngoingStubbing
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HeroRepositoryImplTest {
@@ -38,7 +41,7 @@ class HeroRepositoryImplTest {
     @Test
     fun `given no data are stored when getHeroes is invoked then verify api call and store to DB`() = runTest{
         // given
-        given(heroLocalSourceMock.isEmpty()).willReturn(flowOf(false))
+        given(heroLocalSourceMock.isEmpty()).willReturn(flowOf(true))
         given(heroRemoteSourceMock.getHeroes()).willReturn(heroRemoteSourceMock.getHeroes())
 
         // when
@@ -55,7 +58,7 @@ class HeroRepositoryImplTest {
     @Test
     fun `given data are stored when getHeroes is invoked then verify retrieving of data from DB`() = runTest{
         // given
-        given(heroLocalSourceMock.isEmpty()).willReturn(flowOf(true))
+        given(heroLocalSourceMock.isEmpty()).willReturn(flowOf(false))
         given(heroLocalSourceMock.getHeroes()).willReturn(heroLocalSourceMock.getHeroes())
 
         // when
@@ -66,14 +69,7 @@ class HeroRepositoryImplTest {
             verify(heroLocalSourceMock).isEmpty()
             verify(heroLocalSourceMock).getHeroes()
         }
-
     }
 
-    fun RHero.mapToHero() = Hero (
-        id = this.id,
-        name = this.name,
-        availableComics = this.availableComics.availableComics,
-        imageUrl = Converters().thumbnailToString(this.imageUrl)
-    )
 
 }
