@@ -2,6 +2,7 @@ package com.learningwithmanos.uniexercise.heroes.source.remote
 
 import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.data.RHero
+import com.learningwithmanos.uniexercise.heroes.source.local.Converters
 import javax.inject.Inject
 
 /**
@@ -30,8 +31,8 @@ class HeroRemoteSourceImpl @Inject constructor(
     fun RHero.mapToHero() = Hero (
         id = this.id,
         name = this.name,
-        availableComics = this.availableComics,
-        imageUrl = this.imageUrl
+        availableComics = this.availableComics.availableComics,
+        imageUrl = Converters().thumbnailToString(this.imageUrl)
     )
 
 }

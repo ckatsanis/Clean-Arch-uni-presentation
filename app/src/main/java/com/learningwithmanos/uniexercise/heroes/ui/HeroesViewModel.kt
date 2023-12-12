@@ -80,7 +80,7 @@ data class HeroTileModel(
 
 fun Hero.mapHeroToHeroTileModel(): HeroTileModel {
     return HeroTileModel(
-        title = "$name, comics - ${availableComics.availableComics}",
-        imageUrl = imageUrl.getThumbnail()// image view are implemented with coil jc
+        title = "$name, comics - ${availableComics}",
+        imageUrl = imageUrl// image view are implemented with coil jc
     )
 }

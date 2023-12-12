@@ -2,11 +2,15 @@ package com.learningwithmanos.uniexercise.heroes.ui
 
 import android.widget.ImageView
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,7 +41,10 @@ fun HeroesScreen(
             Text(modifier = Modifier.clickable { viewModel.selectTab(Tab.SortedByComicHeroes) }, textAlign = TextAlign.Center, text = "Heroes by Comic")
         }
 
-        Column {
+        Column (
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+        ){
             ShowHeroes(heroes = heroesList.value)
         }
     }

@@ -25,16 +25,13 @@ interface MarvelDao {
     fun insertCharacters(hero: List<LHero>)
 
     @Query("SELECT * FROM MarvelTable")
-    fun getAllHeroes(): List<LHero>
+    fun getAllHeroes(): Flow<List<LHero>>
 
     @Query("SELECT * FROM MarvelTable WHERE id =(:heroId)")
-    fun getHeroById(heroId: Int): LHero
-
-    @Query("SELECT * FROM MarvelTable WHERE id =(:heroId)")
-    fun isHeroDataStored(heroId: Int): Boolean
+    fun getHeroById(heroId: Int): Flow<LHero>
 
     @Query("SELECT (SELECT COUNT(*) FROM MarvelTable) == 0")
-    fun isEmpty(): Boolean
+    fun isEmpty(): Flow<Boolean>
 
     @Delete
     fun delete(hero: LHero)
