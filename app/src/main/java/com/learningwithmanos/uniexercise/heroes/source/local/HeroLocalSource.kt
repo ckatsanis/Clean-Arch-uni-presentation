@@ -25,7 +25,7 @@ interface HeroLocalSource {
      * Stores a list of heroes to the local data storage
      * @param heroes list of heroes to be stored
      */
-    fun storeHeroes(heroes: List<Hero>)
+    suspend fun storeHeroes(heroes: List<Hero>)
 
     /**
      * @return the list of heroes stored at the local storage
@@ -37,7 +37,7 @@ interface HeroLocalSource {
 
 class HeroLocalSourceImpl @Inject constructor(private val marvelDao : MarvelDao): HeroLocalSource {
 
-    override fun storeHeroes(heroes: List<Hero>) {
+    override suspend fun storeHeroes(heroes: List<Hero>) {
 
         val hero: List<LHero> = heroes.map {
             it.mapToLHero()

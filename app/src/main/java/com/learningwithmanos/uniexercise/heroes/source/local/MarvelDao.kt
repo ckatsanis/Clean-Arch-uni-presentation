@@ -16,13 +16,13 @@ import javax.inject.Inject
 interface MarvelDao {
 
     @Insert
-    fun insertAll( vararg hero: LHero)
+    suspend fun insertAll( vararg hero: LHero)
 
     @Insert
-    fun insert(hero: LHero)
+    suspend fun insert(hero: LHero)
 
     @Insert
-    fun insertCharacters(hero: List<LHero>)
+    suspend fun insertCharacters(hero: List<LHero>)
 
     @Query("SELECT * FROM MarvelTable")
     fun getAllHeroes(): Flow<List<LHero>>
@@ -34,5 +34,5 @@ interface MarvelDao {
     fun isEmpty(): Flow<Boolean>
 
     @Delete
-    fun delete(hero: LHero)
+    suspend fun delete(hero: LHero)
 }
