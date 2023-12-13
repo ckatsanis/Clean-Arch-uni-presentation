@@ -1,5 +1,8 @@
 package com.learningwithmanos.uniexercise.heroes.source.remote
 
+import com.learningwithmanos.uniexercise.heroes.data.Hero
+import com.learningwithmanos.uniexercise.heroes.data.RHero
+import com.learningwithmanos.uniexercise.heroes.source.local.Converters
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -27,6 +30,16 @@ class HeroRemoteSourceImplTest {
         heroRemoteSourceImpl.getHeroes()
 
         // then
-        verify(restApi).getData()
+        verify(restApi).getData().data.results.map {
+            it.mapToHero()
+        }
     }
+
+    fun RHero.mapToHero() = Hero (
+        id = this.id,
+        name = this.name,
+        availableComics = this.availableComics.availableComics,
+        imageUrl = Converters().thumbnailToString(this.imageUrl)
+    )
+
 }
