@@ -30,6 +30,21 @@ class HeroRepositoryImplTest {
     private val heroRemoteSourceMock: HeroRemoteSource = mock()
     private val heroLocalSourceMock: HeroLocalSource = mock()
 
+    val dummy = listOf(
+        Hero(
+            id = 1,
+            name = "Some",
+            availableComics = 10,
+            imageUrl = "some.com"
+        ),
+        Hero(
+            id = 2,
+            name = "Some",
+            availableComics = 10,
+            imageUrl = "some.com"
+        )
+    )
+
     @Before
     fun setUp() {
         heroRepositoryImpl = HeroRepositoryImpl(
@@ -42,12 +57,12 @@ class HeroRepositoryImplTest {
     fun `given no data are stored when getHeroes is invoked then verify api call and store to DB`() = runTest{
         // given
         given(heroLocalSourceMock.isEmpty()).willReturn(flowOf(true))
-        given(heroRemoteSourceMock.getHeroes()).willReturn(heroRemoteSourceMock.getHeroes())
+        given(heroRemoteSourceMock.getHeroes()).willReturn(dummy)
 
         // when
         heroRepositoryImpl.getHeroes().collect { actualHeroes ->
             // then
-            assertThat(actualHeroes, equalTo(heroRepositoryImpl.getHeroes()))
+            assertThat(actualHeroes, equalTo(dummy))
             verify(heroLocalSourceMock).isEmpty()
             verify(heroRemoteSourceMock).getHeroes()
             verify(heroLocalSourceMock).storeHeroes(heroRemoteSourceMock.getHeroes())
@@ -59,15 +74,15 @@ class HeroRepositoryImplTest {
     fun `given data are stored when getHeroes is invoked then verify retrieving of data from DB`() = runTest{
         // given
         given(heroLocalSourceMock.isEmpty()).willReturn(flowOf(false))
-        given(heroLocalSourceMock.getHeroes()).willReturn(heroLocalSourceMock.getHeroes())
+        given(heroLocalSourceMock.getHeroes()).willReturn(flowOf(dummy))
 
         // when
         heroRepositoryImpl.getHeroes().collect { actualHeroes ->
             // then
-            assertThat(actualHeroes, equalTo(heroRepositoryImpl.getHeroes()))
-            verifyNoMoreInteractions(heroRemoteSourceMock)
+            assertThat(actualHeroes, equalTo(dummy))
             verify(heroLocalSourceMock).isEmpty()
             verify(heroLocalSourceMock).getHeroes()
+            verifyNoMoreInteractions(heroRemoteSourceMock)
         }
     }
 
