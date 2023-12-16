@@ -16,6 +16,7 @@ import com.learningwithmanos.uniexercise.heroes.ui.ApiScreen
 import com.learningwithmanos.uniexercise.heroes.ui.HeroesScreen
 import com.learningwithmanos.uniexercise.theme.MyApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 
 @AndroidEntryPoint
@@ -24,6 +25,8 @@ class MainActivity : ComponentActivity() {
     private lateinit var navController: NavHostController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppPreferences.setup(applicationContext)
+
         setContent {
             MyApplicationTheme {
                 navController = rememberNavController()
@@ -52,7 +55,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-    fun getContext(): Context { return applicationContext }
-
 }
