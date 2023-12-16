@@ -4,13 +4,8 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.data.LHero
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.migration.DisableInstallInCheck
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
 @Dao
 interface MarvelDao {

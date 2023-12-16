@@ -1,15 +1,9 @@
 package com.learningwithmanos.uniexercise.heroes.source.local
 
-import androidx.room.Entity
 import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.data.LHero
-import com.learningwithmanos.uniexercise.heroes.data.RHero
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -53,13 +47,6 @@ class HeroLocalSourceImpl @Inject constructor(private val marvelDao : MarvelDao)
     override fun isEmpty(): Flow<Boolean> {
         return marvelDao.isEmpty()
     }
-
-    fun RHero.mapToRHero() = Hero (
-        id = this.id,
-        name = this.name,
-        availableComics = this.availableComics.availableComics,
-        imageUrl = Converters().thumbnailToString(this.imageUrl)
-    )
 
     fun LHero.mapToHero() = Hero (
         id = this.id,
