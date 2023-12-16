@@ -3,9 +3,7 @@ package com.learningwithmanos.uniexercise.heroes.usecase
 import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.repo.HeroRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -22,6 +20,21 @@ class GetHeroesSortedByNameUCImplTest {
 
     private val heroRepositoryMock: HeroRepository = mock()
 
+    val dummy = listOf(
+        Hero(
+            id = 1,
+            name = "Some",
+            availableComics = 10,
+            imageUrl = "some.com"
+        ),
+        Hero(
+            id = 2,
+            name = "Some",
+            availableComics = 10,
+            imageUrl = "some.com"
+        )
+    )
+
     @Before
     fun setUp() {
         getHeroesSortedByNameUCImpl = GetHeroesSortedByNameUCImpl(
@@ -32,9 +45,8 @@ class GetHeroesSortedByNameUCImplTest {
     @Test
     fun `when execute is invoked then verify interactions`()= runTest{
         // given
-        val heroesList = heroRepositoryMock.getHeroes()
-        given(heroRepositoryMock.getHeroes()).willReturn((heroesList))
-        val expectedHeroesList = heroesList.map { list -> list.sortedBy { it.name } }
+        given(heroRepositoryMock.getHeroes()).willReturn((flowOf(dummy)))
+        val expectedHeroesList = sortHeroListByName(dummy)
 
         // when
         getHeroesSortedByNameUCImpl.execute().collect { actual ->
@@ -43,6 +55,10 @@ class GetHeroesSortedByNameUCImplTest {
             verify(heroRepositoryMock).getHeroes()
         }
 
+    }
+
+    private fun sortHeroListByName(heroesList: List<Hero>): List<Hero> {
+        return heroesList.sortedBy { it.name }
     }
 
 }
