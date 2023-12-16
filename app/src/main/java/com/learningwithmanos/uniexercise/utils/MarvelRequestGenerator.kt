@@ -1,6 +1,5 @@
 package com.learningwithmanos.uniexercise.utils
 
-import android.content.SharedPreferences
 import com.learningwithmanos.uniexercise.AppPreferences
 
 
