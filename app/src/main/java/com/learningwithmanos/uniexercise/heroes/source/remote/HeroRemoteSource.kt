@@ -2,7 +2,6 @@ package com.learningwithmanos.uniexercise.heroes.source.remote
 
 import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.data.RHero
-import com.learningwithmanos.uniexercise.heroes.response.MarvelCharacterResponse
 import com.learningwithmanos.uniexercise.heroes.source.local.Converters
 import javax.inject.Inject
 
@@ -21,12 +20,8 @@ class HeroRemoteSourceImpl @Inject constructor(
     private val restApi: MarvelRepo
 ): HeroRemoteSource {
     override suspend fun getHeroes(): List<Hero> {
-        var hero: List<Hero> = emptyList()
-
-        if (restApi.getData().code?.toInt() == 200) {
-            hero = restApi.getData().data.results.map {
+        val hero: List<Hero> = restApi.getData().data.results.map {
                 it.mapToHero()
-            }
         }
 
         return hero
