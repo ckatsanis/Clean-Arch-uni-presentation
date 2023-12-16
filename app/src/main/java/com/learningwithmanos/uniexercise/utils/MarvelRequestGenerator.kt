@@ -1,6 +1,14 @@
 package com.learningwithmanos.uniexercise.utils
 
+import android.content.SharedPreferences
+
+
+
+
 class MarvelRequestGenerator private constructor(){
+
+    private lateinit var pref: SharedPreferences
+    var editor: SharedPreferences.Editor = pref.edit()
 
     companion object{
         fun createParams(): MarvelRequestGenerator {
@@ -10,8 +18,8 @@ class MarvelRequestGenerator private constructor(){
         }
     }
 
-    val apiKey: String = "API KEY"
-    val privateKey: String = "Private KEY"
+    val apiKey: String = pref.getString("apikey", null).toString()
+    val privateKey: String = pref.getString("privatekey", null).toString()
     var timestamp :Long? = null
     var hash: String? = null
 

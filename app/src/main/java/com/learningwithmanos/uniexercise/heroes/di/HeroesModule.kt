@@ -8,6 +8,8 @@ import com.learningwithmanos.uniexercise.heroes.source.local.MarvelDao
 import com.learningwithmanos.uniexercise.heroes.source.local.MarvelDatabaseImp
 import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSource
 import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSourceImpl
+import com.learningwithmanos.uniexercise.heroes.source.remote.MarvelRepo
+import com.learningwithmanos.uniexercise.heroes.source.remote.MarvelRepoImpl
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesSortedByHighestNumberOfComicsUC
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesSortedByHighestNumberOfComicsUCImpl
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesSortedByNameUC
@@ -62,11 +64,11 @@ interface HeroesModule {
 
     // external frameworks
 
- /*   @Binds
+    @Binds
     fun bindMarvelRepo(
         marvelRepoImpl: MarvelRepoImpl
     ): MarvelRepo
-
+/*
     @Binds
     fun bindMarvelDao(
         marvelDatabaseImp: MarvelDatabaseImp

@@ -17,7 +17,7 @@ interface HeroRemoteSource {
 }
 
 class HeroRemoteSourceImpl @Inject constructor(
-    private val restApi: MarvelRepoImpl
+    private val restApi: MarvelRepo
 ): HeroRemoteSource {
 
     override suspend fun getHeroes(): List<Hero> {
