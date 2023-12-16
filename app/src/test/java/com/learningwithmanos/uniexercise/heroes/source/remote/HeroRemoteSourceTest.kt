@@ -1,17 +1,16 @@
 package com.learningwithmanos.uniexercise.heroes.source.remote
 
-import com.learningwithmanos.uniexercise.heroes.data.Hero
+import com.learningwithmanos.uniexercise.heroes.data.Comics
+import com.learningwithmanos.uniexercise.heroes.data.HeroData
 import com.learningwithmanos.uniexercise.heroes.data.RHero
-import com.learningwithmanos.uniexercise.heroes.repo.HeroRepository
-import com.learningwithmanos.uniexercise.heroes.source.local.Converters
+import com.learningwithmanos.uniexercise.heroes.data.Thumbnail
+import com.learningwithmanos.uniexercise.heroes.response.MarvelCharacterResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
+import org.hamcrest.core.IsEqual.equalTo
 import org.junit.Before
 import org.junit.Test
-import org.mockito.BDDMockito
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
@@ -22,18 +21,24 @@ class HeroRemoteSourceImplTest {
     private lateinit var heroRemoteSourceImpl: HeroRemoteSourceImpl
 
     private val restApi: MarvelRepo = mock()
-    val dummy = listOf(
-        Hero(
-            id = 1,
-            name = "Some",
-            availableComics = 10,
-            imageUrl = "some.com"
-        ),
-        Hero(
-            id = 2,
-            name = "Some",
-            availableComics = 10,
-            imageUrl = "some.com"
+    val dummy = MarvelCharacterResponse(
+            code = 200,
+            status = "Some",
+            data = HeroData(
+                listOf(
+                RHero(
+                    id = 1,
+                    name = "some",
+                    availableComics = Comics(1),
+                    imageUrl = Thumbnail("www","jpg")
+                ),
+                RHero(
+                    id = 1,
+                    name = "some",
+                    availableComics = Comics(1),
+                    imageUrl = Thumbnail("www","jpg")
+                )
+            )
         )
     )
 
@@ -47,19 +52,14 @@ class HeroRemoteSourceImplTest {
     @Test
     fun `when invoking getHeroes verify results and interactions`() = runTest{
         // given
-        given(heroRemoteSourceImpl.getHeroes()).willReturn(dummy)
+        given(restApi.getData()).willReturn(dummy)
+
+//        when
+        val actual = restApi.getData()
 
         // then
-        MatcherAssert.assertThat(heroRemoteSourceImpl.getHeroes(), CoreMatchers.equalTo(dummy))
-        verify(heroRemoteSourceImpl).getHeroes()
-        BDDMockito.verifyNoMoreInteractions(heroRemoteSourceImpl)
+        MatcherAssert.assertThat(actual, equalTo(dummy))
+        verify(restApi).getData()
     }
-
-    fun RHero.mapToHero() = Hero (
-        id = this.id,
-        name = this.name,
-        availableComics = this.availableComics.availableComics,
-        imageUrl = Converters().thumbnailToString(this.imageUrl)
-    )
 
 }
