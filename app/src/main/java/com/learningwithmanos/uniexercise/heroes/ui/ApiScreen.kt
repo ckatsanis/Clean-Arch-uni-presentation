@@ -7,6 +7,7 @@ import android.preference.PreferenceManager
 import android.provider.Settings.Global.getString
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -30,20 +31,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.learningwithmanos.uniexercise.MainActivity
-import com.learningwithmanos.uniexercise.R
+import com.learningwithmanos.uniexercise.AppPreferences
 
-private val context: Context = MainActivity().getContext()
-private val pref: SharedPreferences = context.getSharedPreferences(".sharedprefs", MODE_PRIVATE)
-private var editor: SharedPreferences.Editor = pref.edit();
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ApiScreen(navController: NavHostController = rememberNavController()) {
+fun ApiScreen(navController: NavHostController) {
 
-    var apikey = pref.getString("apikey", "")
-    var privatekey = pref.getString("privatekey", "")
+    var apikey: String? = AppPreferences.apikey
+    var privatekey: String? = AppPreferences.privatekey
 
     Scaffold (
         modifier = Modifier.nestedScroll(
@@ -124,13 +122,25 @@ fun ApiScreen(navController: NavHostController = rememberNavController()) {
                     Text(text = "Save")
                 }
 
+            Button(
+                onClick = { fill() },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = true
+            ) {
+                Text(text = "If you don't have Keys press here!")
+            }
+
         }
 
     }
 }
 
 fun checks(apikey: String, privatekey: String) {
-    editor.putString("apikey", apikey)
-    editor.putString("privatekey", privatekey)
+    AppPreferences.apikey = apikey
+    AppPreferences.privatekey = privatekey
 }
 
+fun fill() {
+    AppPreferences.apikey = "0cf69d45e2482a87f2a9af138efba603"
+    AppPreferences.privatekey = "8aa649a8b299924f9428f6db08189950b7bfd728"
+}

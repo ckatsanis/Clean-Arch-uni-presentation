@@ -10,15 +10,22 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,6 +33,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -36,21 +44,31 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.learningwithmanos.uniexercise.AppPreferences
 import com.learningwithmanos.uniexercise.heroes.data.Tab
+import com.learningwithmanos.uniexercise.heroes.source.local.HeroLocalSource
+import com.learningwithmanos.uniexercise.heroes.source.local.HeroLocalSourceImpl
+import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSource
+import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSourceImpl
+import com.learningwithmanos.uniexercise.heroes.source.remote.MarvelRepo
 import com.learningwithmanos.uniexercise.utils.loadImage
 import de.hdodenhof.circleimageview.CircleImageView
+import org.jetbrains.annotations.Async
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,7 +103,6 @@ fun HeroesScreen(
         }
     ) {
         innerPadding ->
-
         Column (
             modifier = Modifier.padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -110,12 +127,39 @@ fun HeroesScreen(
                 )
             }
 
-            Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-            ) {
-                ShowHeroes(heroes = heroesList.value)
+            if ( !AppPreferences.apikey.isNullOrBlank() || !AppPreferences.privatekey.isNullOrBlank()) {
+                    Column(
+                        modifier = Modifier
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        ShowHeroes(heroes = heroesList.value)
+                    }
             }
+            else
+                AlertDialog(
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Filled.Info,
+                            contentDescription = "Api Setup"
+                        )
+                    },
+                    title = {
+                        Text(text = "Empty Api Values")
+                    },
+                    text = {
+                        Text(text = "Your Api setting is null. Please fill to continue")
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                navController.navigate("Api")
+                            }
+                        ) {
+                            Text("Confirm")
+                        }
+                    },
+                    onDismissRequest = {}
+                )
         }
     }
 }
