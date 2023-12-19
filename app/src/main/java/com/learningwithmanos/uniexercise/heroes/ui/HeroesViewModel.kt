@@ -4,15 +4,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.data.Tab
+import com.learningwithmanos.uniexercise.heroes.response.MarvelCharacterResponse
+import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSource
+import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSourceImpl
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesSortedByHighestNumberOfComicsUC
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesSortedByNameUC
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
@@ -21,7 +26,8 @@ import javax.inject.Inject
 class HeroesViewModel @Inject constructor(
     private val getHeroesUC: GetHeroesUC,
     private val getHeroesSortedByNameUC: GetHeroesSortedByNameUC,
-    private val getHeroesSortedByHighestNumberOfComicsUC: GetHeroesSortedByHighestNumberOfComicsUC
+    private val getHeroesSortedByHighestNumberOfComicsUC: GetHeroesSortedByHighestNumberOfComicsUC,
+    private val marvelResponse: HeroRemoteSource,
 ) : ViewModel() {
 
     private var _selectedTabStateFlow: MutableStateFlow<Tab> = MutableStateFlow(Tab.Heroes)
@@ -46,6 +52,19 @@ class HeroesViewModel @Inject constructor(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
         initialValue = listOf()
+    )
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val resaultStatus: StateFlow<StatusModel> = selectedTabStateFlow.flatMapLatest { selectedTab ->
+        when(selectedTab) {
+            Tab.Heroes -> marvelResponse.getRespond().map { it.ToResponse() }
+            Tab.SortedByNameHeroes -> marvelResponse.getRespond().map { it.ToResponse() }
+            Tab.SortedByComicHeroes -> marvelResponse.getRespond().map { it.ToResponse() }
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = StatusModel(200, "OK")
     )
 
     /**
@@ -74,9 +93,21 @@ data class HeroTileModel(
     val imageUrl: String,
 )
 
+data class StatusModel(
+    val code: Int,
+    val status: String,
+)
+
 fun Hero.mapHeroToHeroTileModel(): HeroTileModel {
     return HeroTileModel(
         title = "$name, comics - ${availableComics}",
         imageUrl = imageUrl// image view are implemented with coil jc
+    )
+}
+
+fun MarvelCharacterResponse.ToResponse() : StatusModel {
+    return StatusModel(
+        code = code,
+        status = status
     )
 }

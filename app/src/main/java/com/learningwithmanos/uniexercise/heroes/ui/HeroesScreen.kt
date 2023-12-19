@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -13,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -37,7 +39,6 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.learningwithmanos.uniexercise.AppPreferences
 import com.learningwithmanos.uniexercise.heroes.data.Tab
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeroesScreen(
@@ -47,6 +48,7 @@ fun HeroesScreen(
 
     val selectedTab = viewModel.selectedTabStateFlow.collectAsState()
     val heroesList = viewModel.heroesStateFlow.collectAsState()
+    val response = viewModel.resaultStatus.collectAsState()
 
     Scaffold (
         modifier = Modifier.nestedScroll(TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()).nestedScrollConnection),
@@ -100,7 +102,10 @@ fun HeroesScreen(
                         modifier = Modifier
                             .verticalScroll(rememberScrollState())
                     ) {
-                        ShowHeroes(heroes = heroesList.value)
+                        if (response.value.code == 200)
+                            ShowHeroes(heroes = heroesList.value)
+                        else
+                            ShowError(code = response.value.code, status = response.value.status)
                     }
             }
             else
@@ -146,5 +151,13 @@ fun ShowHeroes(heroes: List<HeroTileModel>) {
             )
             Text(text = it.title)
         }
+    }
+}
+
+@Composable
+fun ShowError(code: Int, status: String) {
+    Row {
+        Text(text = "The are problem with request to the api with code ${code} and status message $status")
+        Text(text = "Go to Api configuration page to configure")
     }
 }
