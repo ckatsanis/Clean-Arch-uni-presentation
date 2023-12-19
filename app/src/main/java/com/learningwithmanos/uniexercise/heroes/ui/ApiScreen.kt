@@ -18,18 +18,27 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.learningwithmanos.uniexercise.AppPreferences
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ApiScreen(navController: NavHostController) {
+fun ApiScreen(
+    navController: NavHostController,
+    viewModel: HeroesViewModel = hiltViewModel()
 
-    var apikey: String? = AppPreferences.apikey
-    var privatekey: String? = AppPreferences.privatekey
+) {
+
+    var apikey by rememberSaveable { mutableStateOf(AppPreferences.apikey) }
+    var privatekey by rememberSaveable { mutableStateOf(AppPreferences.privatekey) }
 
     Scaffold (
         modifier = Modifier.nestedScroll(
@@ -71,10 +80,7 @@ fun ApiScreen(navController: NavHostController) {
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = apikey.toString(),
-                onValueChange = {
-                    if (it !== "")
-                        apikey = it
-                },
+                onValueChange = { apikey = it },
                 placeholder = { Text(text = "e.g. Hexamine") },
             )
 
@@ -86,14 +92,11 @@ fun ApiScreen(navController: NavHostController) {
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = privatekey.toString(),
-                onValueChange = {
-                    if (it !== "")
-                        privatekey = it
-                },
+                onValueChange = { privatekey = it },
                 placeholder = { Text(text = "e.g. Hexamine") },
             )
 
-            if (!(apikey.equals("") || !(privatekey.equals(""))))
+            if ((apikey.isNullOrBlank() || (privatekey.isNullOrBlank())))
                 Button(
                     onClick = { /*TODO*/ },
                     modifier = Modifier.fillMaxWidth(),
@@ -103,7 +106,10 @@ fun ApiScreen(navController: NavHostController) {
                 }
             else
                 Button(
-                    onClick = { checks(apikey.toString(), privatekey.toString()) },
+                    onClick = {
+                        setApi(apikey.toString(), privatekey.toString())
+                        navController.navigate("Heroes")
+                        },
                     modifier = Modifier.fillMaxWidth(),
                     enabled = true
                 ) {
@@ -123,7 +129,7 @@ fun ApiScreen(navController: NavHostController) {
     }
 }
 
-fun checks(apikey: String, privatekey: String) {
+fun setApi(apikey: String, privatekey: String) {
     AppPreferences.apikey = apikey
     AppPreferences.privatekey = privatekey
 }

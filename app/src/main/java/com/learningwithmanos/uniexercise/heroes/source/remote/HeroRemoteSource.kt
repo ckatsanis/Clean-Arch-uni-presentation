@@ -2,7 +2,10 @@ package com.learningwithmanos.uniexercise.heroes.source.remote
 
 import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.data.RHero
+import com.learningwithmanos.uniexercise.heroes.response.MarvelCharacterResponse
 import com.learningwithmanos.uniexercise.heroes.source.local.Converters
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 /**
@@ -14,6 +17,8 @@ interface HeroRemoteSource {
      * @return retrieves the a list of heroes from a certain endpoint
      */
     suspend fun getHeroes(): List<Hero>
+    suspend fun getRespond(): Flow<MarvelCharacterResponse>
+
 }
 
 class HeroRemoteSourceImpl @Inject constructor(
@@ -25,6 +30,10 @@ class HeroRemoteSourceImpl @Inject constructor(
         }
 
         return hero
+    }
+
+    override suspend fun getRespond(): Flow<MarvelCharacterResponse> {
+        return flowOf(restApi.getData())
     }
 
     fun RHero.mapToHero() = Hero (
