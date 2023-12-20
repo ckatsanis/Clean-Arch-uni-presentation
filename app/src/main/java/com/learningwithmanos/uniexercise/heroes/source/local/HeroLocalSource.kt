@@ -27,6 +27,8 @@ interface HeroLocalSource {
     fun getHeroes(): Flow<List<Hero>>
 
     fun isEmpty(): Flow<Boolean>
+
+    fun delete()
 }
 
 class HeroLocalSourceImpl @Inject constructor(private val marvelDao : MarvelDao): HeroLocalSource {
@@ -46,6 +48,10 @@ class HeroLocalSourceImpl @Inject constructor(private val marvelDao : MarvelDao)
 
     override fun isEmpty(): Flow<Boolean> {
         return marvelDao.isEmpty()
+    }
+
+    override fun delete() {
+        marvelDao.deleteAll()
     }
 
     fun LHero.mapToHero() = Hero (

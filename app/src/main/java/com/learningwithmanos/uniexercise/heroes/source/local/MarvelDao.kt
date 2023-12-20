@@ -29,5 +29,8 @@ interface MarvelDao {
     fun isEmpty(): Flow<Boolean>
 
     @Delete
-    suspend fun delete(hero: LHero)
+    fun delete(hero: LHero)
+
+    @Query("DELETE FROM MarvelTable")
+    fun deleteAll()
 }
