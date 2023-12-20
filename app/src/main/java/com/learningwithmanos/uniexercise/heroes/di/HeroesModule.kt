@@ -65,10 +65,4 @@ interface HeroesModule {
     fun bindMarvelRepo(
         marvelRepoImpl: MarvelRepoImpl
     ): MarvelRepo
-/*
-    @Binds
-    fun bindMarvelDao(
-        marvelDatabaseImp: MarvelDatabaseImp
-    ): MarvelDao
-*/
 }

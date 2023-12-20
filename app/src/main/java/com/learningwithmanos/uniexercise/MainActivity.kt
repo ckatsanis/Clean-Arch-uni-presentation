@@ -16,7 +16,6 @@ import com.learningwithmanos.uniexercise.heroes.ui.ApiScreen
 import com.learningwithmanos.uniexercise.heroes.ui.HeroesScreen
 import com.learningwithmanos.uniexercise.theme.MyApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.qualifiers.ApplicationContext
 
 
 @AndroidEntryPoint

@@ -1,10 +1,13 @@
 package com.learningwithmanos.uniexercise.heroes.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.data.Tab
+import com.learningwithmanos.uniexercise.heroes.repo.HeroRepository
 import com.learningwithmanos.uniexercise.heroes.response.MarvelCharacterResponse
+import com.learningwithmanos.uniexercise.heroes.source.local.HeroLocalSource
 import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSource
 import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSourceImpl
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesSortedByHighestNumberOfComicsUC
@@ -28,6 +31,7 @@ class HeroesViewModel @Inject constructor(
     private val getHeroesSortedByNameUC: GetHeroesSortedByNameUC,
     private val getHeroesSortedByHighestNumberOfComicsUC: GetHeroesSortedByHighestNumberOfComicsUC,
     private val marvelResponse: HeroRemoteSource,
+    private val heroLocalSource: HeroLocalSource,
 ) : ViewModel() {
 
     private var _selectedTabStateFlow: MutableStateFlow<Tab> = MutableStateFlow(Tab.Heroes)
@@ -66,6 +70,8 @@ class HeroesViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(),
         initialValue = StatusModel(200, "OK")
     )
+
+    val localSource: HeroLocalSource = heroLocalSource
 
     /**
      * Utilises corresponding UC to retrieve data based on the selectedTab.
@@ -106,6 +112,7 @@ fun Hero.mapHeroToHeroTileModel(): HeroTileModel {
 }
 
 fun MarvelCharacterResponse.ToResponse() : StatusModel {
+    Log.d("API RESPONSE", "ToResponse: ${code} and $status")
     return StatusModel(
         code = code,
         status = status
