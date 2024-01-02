@@ -48,7 +48,6 @@ fun HeroesScreen(
 
     val selectedTab = viewModel.selectedTabStateFlow.collectAsState()
     val heroesList = viewModel.heroesStateFlow.collectAsState()
-    val response = viewModel.resaultStatus.collectAsState()
 
     Scaffold (
         modifier = Modifier.nestedScroll(TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()).nestedScrollConnection),
@@ -102,10 +101,10 @@ fun HeroesScreen(
                         modifier = Modifier
                             .verticalScroll(rememberScrollState())
                     ) {
-                        if (response.value.code == 200)
+                        if (heroesList.value.isNotEmpty())
                             ShowHeroes(heroes = heroesList.value)
                         else
-                            ShowError(code = response.value.code, status = response.value.status)
+                            ShowError()
                     }
             }
             else
@@ -155,9 +154,10 @@ fun ShowHeroes(heroes: List<HeroTileModel>) {
 }
 
 @Composable
-fun ShowError(code: Int, status: String) {
+fun ShowError() {
     Row {
-        Text(text = "The are problem with request to the api with code ${code} and status message $status")
+        Text(text = "There are problem with request to the api.")
+        Text(text = "Check if api and private key are correct")
         Text(text = "Go to Api configuration page to configure")
     }
 }

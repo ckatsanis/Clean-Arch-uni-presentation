@@ -30,7 +30,6 @@ class HeroesViewModel @Inject constructor(
     private val getHeroesUC: GetHeroesUC,
     private val getHeroesSortedByNameUC: GetHeroesSortedByNameUC,
     private val getHeroesSortedByHighestNumberOfComicsUC: GetHeroesSortedByHighestNumberOfComicsUC,
-    private val marvelResponse: HeroRemoteSource,
     private val heroLocalSource: HeroLocalSource,
 ) : ViewModel() {
 
@@ -56,19 +55,6 @@ class HeroesViewModel @Inject constructor(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
         initialValue = listOf()
-    )
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val resaultStatus: StateFlow<StatusModel> = selectedTabStateFlow.flatMapLatest { selectedTab ->
-        when(selectedTab) {
-            Tab.Heroes -> marvelResponse.getRespond().map { it.ToResponse() }
-            Tab.SortedByNameHeroes -> marvelResponse.getRespond().map { it.ToResponse() }
-            Tab.SortedByComicHeroes -> marvelResponse.getRespond().map { it.ToResponse() }
-        }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = StatusModel(200, "OK")
     )
 
     val localSource: HeroLocalSource = heroLocalSource
