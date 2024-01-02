@@ -17,7 +17,6 @@ interface HeroRemoteSource {
      * @return retrieves the a list of heroes from a certain endpoint
      */
     suspend fun getHeroes(): List<Hero>
-    suspend fun getRespond(): Flow<MarvelCharacterResponse>
 
 }
 
@@ -25,15 +24,18 @@ class HeroRemoteSourceImpl @Inject constructor(
     private val restApi: MarvelRepo
 ): HeroRemoteSource {
     override suspend fun getHeroes(): List<Hero> {
-        val hero: List<Hero> = restApi.getData().data.results.map {
+        val response: MarvelCharacterResponse = restApi.getData()
+        var hero: List<Hero> = listOf()
+
+        if (response.code == 200) {
+            hero = response.data.results.map {
                 it.mapToHero()
+            }
+        } else {
+            hero = listOf()
         }
 
         return hero
-    }
-
-    override suspend fun getRespond(): Flow<MarvelCharacterResponse> {
-        return flowOf(restApi.getData())
     }
 
     fun RHero.mapToHero() = Hero (
