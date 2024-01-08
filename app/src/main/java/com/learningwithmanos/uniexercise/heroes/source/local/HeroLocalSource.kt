@@ -28,7 +28,7 @@ interface HeroLocalSource {
 
     fun isEmpty(): Flow<Boolean>
 
-    fun delete()
+    suspend fun delete()
 }
 
 class HeroLocalSourceImpl @Inject constructor(private val marvelDao : MarvelDao): HeroLocalSource {
@@ -50,7 +50,7 @@ class HeroLocalSourceImpl @Inject constructor(private val marvelDao : MarvelDao)
         return marvelDao.isEmpty()
     }
 
-    override fun delete() {
+    override suspend fun delete() {
         marvelDao.deleteAll()
     }
 

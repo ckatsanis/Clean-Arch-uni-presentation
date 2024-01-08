@@ -30,7 +30,6 @@ class HeroesViewModel @Inject constructor(
     private val getHeroesUC: GetHeroesUC,
     private val getHeroesSortedByNameUC: GetHeroesSortedByNameUC,
     private val getHeroesSortedByHighestNumberOfComicsUC: GetHeroesSortedByHighestNumberOfComicsUC,
-    private val heroLocalSource: HeroLocalSource,
 ) : ViewModel() {
 
     private var _selectedTabStateFlow: MutableStateFlow<Tab> = MutableStateFlow(Tab.Heroes)
@@ -56,8 +55,6 @@ class HeroesViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(),
         initialValue = listOf()
     )
-
-    val localSource: HeroLocalSource = heroLocalSource
 
     /**
      * Utilises corresponding UC to retrieve data based on the selectedTab.

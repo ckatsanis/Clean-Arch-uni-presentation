@@ -20,6 +20,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -28,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.learningwithmanos.uniexercise.AppPreferences
 import com.learningwithmanos.uniexercise.heroes.repo.HeroRepository
@@ -35,6 +37,8 @@ import com.learningwithmanos.uniexercise.heroes.source.local.HeroLocalSource
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import okhttp3.Dispatcher
 import javax.inject.Inject
@@ -43,7 +47,7 @@ import javax.inject.Inject
 @Composable
 fun ApiScreen(
     navController: NavHostController,
-    viewModel: HeroesViewModel = hiltViewModel(),
+    viewModel: ApiViewModel = hiltViewModel(),
 ) {
 
     var apikey by rememberSaveable { mutableStateOf(AppPreferences.apikey) }
@@ -117,7 +121,7 @@ fun ApiScreen(
             else
                 Button(
                     onClick = {
-                        setApi(apikey.toString(), privatekey.toString(), local)
+                        viewModel.setApi(apikey.toString(), privatekey.toString())
                         navController.navigate("Heroes")
                         },
                     modifier = Modifier.fillMaxWidth(),
@@ -128,7 +132,7 @@ fun ApiScreen(
 
             Button(
                 onClick = {
-                    fill(apikey.toString(), privatekey.toString(), local)
+                    viewModel.fill(apikey.toString(), privatekey.toString())
                     navController.navigate("Heroes")
                     },
                 modifier = Modifier.fillMaxWidth(),
@@ -139,30 +143,5 @@ fun ApiScreen(
 
         }
 
-    }
-}
-
-
-@OptIn(DelicateCoroutinesApi::class)
-fun fill(apikey: String, privatekey: String, localSource: HeroLocalSource) {
-    if (apikey != "0cf69d45e2482a87f2a9af138efba603" || privatekey != "8aa649a8b299924f9428f6db08189950b7bfd728") {
-        AppPreferences.apikey = "0cf69d45e2482a87f2a9af138efba603"
-        AppPreferences.privatekey = "8aa649a8b299924f9428f6db08189950b7bfd728"
-        GlobalScope.launch(Dispatchers.IO)  {
-            localSource.delete()
-            Log.d("Dispacher RUN", "fill: local db deleted API: $apikey Private: $privatekey")
-        }
-    }
-}
-
-@OptIn(DelicateCoroutinesApi::class)
-fun setApi(apikey: String, privatekey: String, localSource: HeroLocalSource) {
-    if (!(AppPreferences.apikey.equals(apikey)) || !(AppPreferences.privatekey.equals(privatekey))) {
-        AppPreferences.apikey = apikey
-        AppPreferences.privatekey = privatekey
-        GlobalScope.launch(Dispatchers.IO)  {
-            localSource.delete()
-            Log.d("Dispacher RUN", "setApi: local db deleted API: $apikey Private: $privatekey")
-        }
     }
 }
