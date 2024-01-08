@@ -157,7 +157,11 @@ fun ShowHeroes(heroes: List<HeroTileModel>) {
 fun ShowError() {
     Row {
         Text(text = "There are problem with request to the api.")
+    }
+    Row {
         Text(text = "Check if api and private key are correct")
+    }
+    Row {
         Text(text = "Go to Api configuration page to configure")
     }
 }
