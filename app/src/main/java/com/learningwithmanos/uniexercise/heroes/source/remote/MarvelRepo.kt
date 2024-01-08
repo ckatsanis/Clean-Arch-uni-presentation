@@ -5,12 +5,14 @@ import com.learningwithmanos.uniexercise.heroes.response.MarvelCharacterResponse
 import com.learningwithmanos.uniexercise.network.MarvelApi
 import com.learningwithmanos.uniexercise.network.MarvelApiClient
 import com.learningwithmanos.uniexercise.utils.MarvelRequestGenerator
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
-private var params = MarvelRequestGenerator.createParams()
 private var client: MarvelApi = MarvelApiClient.api
 interface MarvelRepo  {
     suspend fun getData(): MarvelCharacterResponse
+    suspend fun getParams(): Flow<MarvelRequestGenerator>
 }
 
 class MarvelRepoImpl @Inject constructor() : MarvelRepo {
@@ -18,6 +20,7 @@ class MarvelRepoImpl @Inject constructor() : MarvelRepo {
     override suspend fun getData(): MarvelCharacterResponse {
         var response: MarvelCharacterResponse = MarvelCharacterResponse(0, "", HeroData(listOf()))
         try {
+            var params = MarvelRequestGenerator.createParams()
             response = client.getCharacters(
                 params.timestamp,
                 params.apiKey,
@@ -30,5 +33,9 @@ class MarvelRepoImpl @Inject constructor() : MarvelRepo {
         }
 
         return response
+    }
+
+    override suspend fun getParams(): Flow<MarvelRequestGenerator> {
+        return flowOf(MarvelRequestGenerator.createParams())
     }
 }
