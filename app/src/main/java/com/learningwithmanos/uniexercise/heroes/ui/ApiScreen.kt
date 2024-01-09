@@ -37,8 +37,14 @@ import com.learningwithmanos.uniexercise.heroes.source.local.HeroLocalSource
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectIndexed
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 import okhttp3.Dispatcher
 import javax.inject.Inject
@@ -110,29 +116,20 @@ fun ApiScreen(
                 placeholder = { Text(text = "e.g. Hexamine") },
             )
 
-            if ((apikey.isNullOrBlank() || (privatekey.isNullOrBlank())))
-                Button(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = false
-                    ) {
-                    Text(text = "Save")
-                }
-            else
-                Button(
-                    onClick = {
-                        viewModel.setApi(apikey.toString(), privatekey.toString())
-                        navController.navigate("Heroes")
-                        },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = true
-                ) {
-                    Text(text = "Save")
-                }
+            Button(
+                onClick = {
+                    setApi(apikey.toString(), privatekey.toString(), local)
+                    navController.navigate("Heroes")
+                },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = viewModel.isEnable()
+            ) {
+                Text(text = "Save")
+            }
 
             Button(
                 onClick = {
-                    viewModel.fill(apikey.toString(), privatekey.toString())
+                    fill(apikey.toString(), privatekey.toString(), local)
                     navController.navigate("Heroes")
                     },
                 modifier = Modifier.fillMaxWidth(),
@@ -143,5 +140,30 @@ fun ApiScreen(
 
         }
 
+    }
+}
+
+
+@OptIn(DelicateCoroutinesApi::class)
+fun fill(apikey: String, privatekey: String, localSource: HeroLocalSource) {
+    val view = ApiViewModel(localSource)
+
+    if (apikey != "0cf69d45e2482a87f2a9af138efba603" || privatekey != "8aa649a8b299924f9428f6db08189950b7bfd728") {
+        AppPreferences.apikey = "0cf69d45e2482a87f2a9af138efba603"
+        AppPreferences.privatekey = "8aa649a8b299924f9428f6db08189950b7bfd728"
+        GlobalScope.async{ view.delete() }
+        Log.d("Dispacher RUN", "fill: local db deleted API: $apikey Private: $privatekey")
+    }
+}
+
+@OptIn(DelicateCoroutinesApi::class)
+fun setApi(apikey: String, privatekey: String, localSource: HeroLocalSource) {
+    val view = ApiViewModel(localSource)
+
+    if (!(AppPreferences.apikey.equals(apikey)) || !(AppPreferences.privatekey.equals(privatekey))) {
+        AppPreferences.apikey = apikey
+        AppPreferences.privatekey = privatekey
+        GlobalScope.async{ view.delete() }
+        Log.d("Dispacher RUN", "setApi: local db deleted API: $apikey Private: $privatekey")
     }
 }

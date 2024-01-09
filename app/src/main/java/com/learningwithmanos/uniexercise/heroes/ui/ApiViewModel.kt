@@ -13,10 +13,14 @@ import com.learningwithmanos.uniexercise.heroes.source.local.MarvelDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -30,31 +34,37 @@ class ApiViewModel @Inject constructor(
     private val heroLocalSource: HeroLocalSource,
 ) : ViewModel() {
 
+    private val _buttonStateFlow = MutableStateFlow(false)
 
-   val localSource: HeroLocalSource = heroLocalSource
+    val buttonStateFlow: StateFlow<Boolean> = _buttonStateFlow.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = _buttonStateFlow.value
+    )
 
-   private fun delete(): Flow<Thread.State> = flow {
-       localSource.delete()
-   }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    fun fill(apikey: String, privatekey: String) {
-        if (apikey != "0cf69d45e2482a87f2a9af138efba603" || privatekey != "8aa649a8b299924f9428f6db08189950b7bfd728") {
-            AppPreferences.apikey = "0cf69d45e2482a87f2a9af138efba603"
-            AppPreferences.privatekey = "8aa649a8b299924f9428f6db08189950b7bfd728"
-            delete()
-            Log.d("Dispacher RUN", "fill: local db deleted API: $apikey Private: $privatekey")
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val buttonCheckStateFlow: Flow<Boolean> = buttonStateFlow.flatMapLatest { buttonState ->
+        when (buttonState) {
+            false -> validateFields()
+            true -> validateFields()
         }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
-    fun setApi(apikey: String, privatekey: String) {
-        if (!(AppPreferences.apikey.equals(apikey)) || !(AppPreferences.privatekey.equals(privatekey))) {
-            AppPreferences.apikey = apikey
-            AppPreferences.privatekey = privatekey
-            delete()
-            Log.d("Dispacher RUN", "setApi: local db deleted API: $apikey Private: $privatekey")
-        }
+    fun isEnable(): Boolean {
+        var result = false
+        GlobalScope.async { buttonCheckStateFlow.collect { result = it } }
+
+        return result
+    }
+
+    private fun validateFields(): Flow<Boolean> {
+        return flowOf(!(AppPreferences.apikey.isNullOrBlank() || AppPreferences.privatekey.isNullOrBlank()))
+    }
+
+    val localSource: HeroLocalSource = heroLocalSource
+
+    suspend fun delete() {
+       localSource.delete()
     }
 
 }
