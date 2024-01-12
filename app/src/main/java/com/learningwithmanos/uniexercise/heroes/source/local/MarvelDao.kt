@@ -32,5 +32,5 @@ interface MarvelDao {
     fun delete(hero: LHero)
 
     @Query("DELETE FROM MarvelTable")
-    fun deleteAll()
+    suspend fun deleteAll()
 }

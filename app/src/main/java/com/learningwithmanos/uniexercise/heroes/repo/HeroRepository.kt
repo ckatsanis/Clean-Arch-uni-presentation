@@ -24,6 +24,10 @@ interface HeroRepository  {
      * @return list of heroes
      */
     suspend fun getHeroes(): Flow<List<Hero>>
+
+    suspend fun fill(apikey: String, privatekey: String)
+
+    suspend fun setApi(apikey: String, privatekey: String)
 }
 
 class HeroRepositoryImpl @Inject constructor (
@@ -41,6 +45,14 @@ class HeroRepositoryImpl @Inject constructor (
                 heroLocalSource.getHeroes()
             }
         }
+    }
+
+    override suspend fun fill(apikey: String, privatekey: String) {
+        heroLocalSource.fill(apikey, privatekey)
+    }
+
+    override suspend fun setApi(apikey: String, privatekey: String) {
+        heroLocalSource.setApi(apikey, privatekey)
     }
 
 }

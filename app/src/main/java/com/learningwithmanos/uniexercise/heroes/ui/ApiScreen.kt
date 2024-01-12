@@ -58,7 +58,6 @@ fun ApiScreen(
 
     var apikey by rememberSaveable { mutableStateOf(AppPreferences.apikey) }
     var privatekey by rememberSaveable { mutableStateOf(AppPreferences.privatekey) }
-    val local = viewModel.localSource
 
     Scaffold (
         modifier = Modifier.nestedScroll(
@@ -118,18 +117,18 @@ fun ApiScreen(
 
             Button(
                 onClick = {
-                    setApi(apikey.toString(), privatekey.toString(), local)
+                    viewModel.setApi(apikey.toString(), privatekey.toString())
                     navController.navigate("Heroes")
                 },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = viewModel.isEnable()
+                enabled = viewModel.validateFields()
             ) {
                 Text(text = "Save")
             }
 
             Button(
                 onClick = {
-                    fill(apikey.toString(), privatekey.toString(), local)
+                    viewModel.fill(apikey.toString(), privatekey.toString())
                     navController.navigate("Heroes")
                     },
                 modifier = Modifier.fillMaxWidth(),
@@ -140,30 +139,5 @@ fun ApiScreen(
 
         }
 
-    }
-}
-
-
-@OptIn(DelicateCoroutinesApi::class)
-fun fill(apikey: String, privatekey: String, localSource: HeroLocalSource) {
-    val view = ApiViewModel(localSource)
-
-    if (apikey != "0cf69d45e2482a87f2a9af138efba603" || privatekey != "8aa649a8b299924f9428f6db08189950b7bfd728") {
-        AppPreferences.apikey = "0cf69d45e2482a87f2a9af138efba603"
-        AppPreferences.privatekey = "8aa649a8b299924f9428f6db08189950b7bfd728"
-        GlobalScope.async{ view.delete() }
-        Log.d("Dispacher RUN", "fill: local db deleted API: $apikey Private: $privatekey")
-    }
-}
-
-@OptIn(DelicateCoroutinesApi::class)
-fun setApi(apikey: String, privatekey: String, localSource: HeroLocalSource) {
-    val view = ApiViewModel(localSource)
-
-    if (!(AppPreferences.apikey.equals(apikey)) || !(AppPreferences.privatekey.equals(privatekey))) {
-        AppPreferences.apikey = apikey
-        AppPreferences.privatekey = privatekey
-        GlobalScope.async{ view.delete() }
-        Log.d("Dispacher RUN", "setApi: local db deleted API: $apikey Private: $privatekey")
     }
 }

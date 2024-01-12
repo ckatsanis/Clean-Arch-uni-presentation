@@ -8,6 +8,8 @@ import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSource
 import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSourceImpl
 import com.learningwithmanos.uniexercise.heroes.source.remote.MarvelRepo
 import com.learningwithmanos.uniexercise.heroes.source.remote.MarvelRepoImpl
+import com.learningwithmanos.uniexercise.heroes.usecase.GetApiActions
+import com.learningwithmanos.uniexercise.heroes.usecase.GetApiActionsImpl
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesSortedByHighestNumberOfComicsUC
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesSortedByHighestNumberOfComicsUCImpl
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesSortedByNameUC
@@ -40,6 +42,10 @@ interface HeroesModule {
         getHeroesSortedByHighestNumberOfComicsUCImpl: GetHeroesSortedByHighestNumberOfComicsUCImpl
     ): GetHeroesSortedByHighestNumberOfComicsUC
 
+    @Binds
+    fun bindsGetApiActionsUC(
+        getApiActionsImpl: GetApiActionsImpl
+    ): GetApiActions
     // Repository
 
     @Binds

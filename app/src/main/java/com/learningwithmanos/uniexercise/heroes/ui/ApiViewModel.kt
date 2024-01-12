@@ -10,6 +10,7 @@ import com.learningwithmanos.uniexercise.AppPreferences
 import com.learningwithmanos.uniexercise.heroes.data.Tab
 import com.learningwithmanos.uniexercise.heroes.source.local.HeroLocalSource
 import com.learningwithmanos.uniexercise.heroes.source.local.MarvelDao
+import com.learningwithmanos.uniexercise.heroes.usecase.GetApiActions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -26,45 +27,29 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
 @HiltViewModel
 class ApiViewModel @Inject constructor(
-    private val heroLocalSource: HeroLocalSource,
+    private val getApiUC: GetApiActions,
 ) : ViewModel() {
 
-    private val _buttonStateFlow = MutableStateFlow(false)
+    fun validateFields(): Boolean {
+        return (!(AppPreferences.apikey.isNullOrBlank() || AppPreferences.privatekey.isNullOrBlank()))
+    }
 
-    val buttonStateFlow: StateFlow<Boolean> = _buttonStateFlow.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = _buttonStateFlow.value
-    )
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val buttonCheckStateFlow: Flow<Boolean> = buttonStateFlow.flatMapLatest { buttonState ->
-        when (buttonState) {
-            false -> validateFields()
-            true -> validateFields()
+    fun setApi(apikey: String, privatekey: String) {
+        viewModelScope.launch {
+            getApiUC.setApiExecute(apikey, privatekey)
         }
     }
 
-    fun isEnable(): Boolean {
-        var result = false
-        GlobalScope.async { buttonCheckStateFlow.collect { result = it } }
-
-        return result
-    }
-
-    private fun validateFields(): Flow<Boolean> {
-        return flowOf(!(AppPreferences.apikey.isNullOrBlank() || AppPreferences.privatekey.isNullOrBlank()))
-    }
-
-    val localSource: HeroLocalSource = heroLocalSource
-
-    suspend fun delete() {
-       localSource.delete()
+    fun fill(apikey: String, privatekey: String) {
+        viewModelScope.launch {
+            getApiUC.fillExecute(apikey, privatekey)
+        }
     }
 
 }
