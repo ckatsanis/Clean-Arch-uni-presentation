@@ -39,6 +39,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -52,12 +53,13 @@ import javax.inject.Inject
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ApiScreen(
-    navController: NavHostController,
+    onIconButtonPressed: () -> Unit,
     viewModel: ApiViewModel = hiltViewModel(),
 ) {
+    val apiKey: String = viewModel.apiKeyStateFlow.collectAsState().value
+    val privateKey: String = viewModel.privateKeyStateFlow.collectAsState().value
 
-    var apikey by rememberSaveable { mutableStateOf(AppPreferences.apikey) }
-    var privatekey by rememberSaveable { mutableStateOf(AppPreferences.privatekey) }
+    val isButtonEnabled: Boolean = viewModel.isButtonEnabledStateFlow.collectAsState().value
 
     Scaffold (
         modifier = Modifier.nestedScroll(
@@ -74,7 +76,7 @@ fun ApiScreen(
                     Text("Api Configuration")
                 },
                 actions = {
-                    IconButton(onClick = { navController.navigate("Heroes") }) {
+                    IconButton(onClick = onIconButtonPressed) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Back"
@@ -98,8 +100,8 @@ fun ApiScreen(
 
             TextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = apikey.toString(),
-                onValueChange = { apikey = it },
+                value = apiKey,
+                onValueChange = { viewModel.updateApiKey(apiKey) },
                 placeholder = { Text(text = "e.g. Hexamine") },
             )
 
@@ -110,26 +112,26 @@ fun ApiScreen(
 
             TextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = privatekey.toString(),
-                onValueChange = { privatekey = it },
+                value = privateKey,
+                onValueChange = { viewModel.updatePrivateKey(privateKey) },
                 placeholder = { Text(text = "e.g. Hexamine") },
             )
 
             Button(
                 onClick = {
-                    viewModel.setApi(apikey.toString(), privatekey.toString())
-                    navController.navigate("Heroes")
+                    viewModel.setApi(apiKey, privateKey)
+                    onIconButtonPressed
                 },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = viewModel.validateFields()
+                enabled = isButtonEnabled
             ) {
                 Text(text = "Save")
             }
 
             Button(
                 onClick = {
-                    viewModel.fill(apikey.toString(), privatekey.toString())
-                    navController.navigate("Heroes")
+                    viewModel.fill(apiKey, privateKey)
+                    onIconButtonPressed
                     },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = true

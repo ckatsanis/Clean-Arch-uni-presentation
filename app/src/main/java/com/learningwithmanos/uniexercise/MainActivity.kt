@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.fillMaxSize(),
                             color = MaterialTheme.colorScheme.background
                         ) {
-                            HeroesScreen(navController)
+                            HeroesScreen(onIconButtonPressed = { navController.navigate("Api") })
                         }
                     }
                     composable("Api") {
@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.fillMaxSize(),
                             color = MaterialTheme.colorScheme.background
                         ) {
-                            ApiScreen(navController)
+                            ApiScreen(onIconButtonPressed = { navController.navigate("Heroes")} )
                         }
                     }
                 }

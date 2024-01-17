@@ -42,7 +42,7 @@ import com.learningwithmanos.uniexercise.heroes.data.Tab
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeroesScreen(
-    navController: NavHostController,
+    onIconButtonPressed: () -> Unit,
     viewModel: HeroesViewModel = hiltViewModel()
 ) {
 
@@ -61,7 +61,7 @@ fun HeroesScreen(
                     Text("Marvel Characters List")
                 },
                 actions = {
-                    IconButton(onClick = { navController.navigate("Api") }) {
+                    IconButton(onClick = onIconButtonPressed ) {
                         Icon(
                             imageVector = Icons.Filled.Build,
                             contentDescription = "Api Setup"
@@ -124,7 +124,7 @@ fun HeroesScreen(
                     confirmButton = {
                         TextButton(
                             onClick = {
-                                navController.navigate("Api")
+                                onIconButtonPressed
                             }
                         ) {
                             Text("Confirm")
