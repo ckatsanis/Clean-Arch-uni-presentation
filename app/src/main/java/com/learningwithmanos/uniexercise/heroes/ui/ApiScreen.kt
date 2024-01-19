@@ -101,7 +101,7 @@ fun ApiScreen(
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = apiKey,
-                onValueChange = { viewModel.apiKeyStateFlow.toString() } ,
+                onValueChange = { viewModel.apiKeyStateFlow.value } ,
                 placeholder = { Text(text = "e.g. Hexamine") },
             )
 
