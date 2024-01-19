@@ -30,8 +30,8 @@ fun ApiScreen(
     onIconButtonPressed: () -> Unit,
     viewModel: ApiViewModel = hiltViewModel(),
 ) {
-    var apiKey: String = viewModel.apiKeyStateFlow.collectAsState().value
-    var privateKey: String = viewModel.privateKeyStateFlow.collectAsState().value
+    val apiKey: String = viewModel.apiKeyStateFlow.collectAsState().value
+    val privateKey: String = viewModel.privateKeyStateFlow.collectAsState().value
 
     val isButtonEnabled: Boolean = viewModel.isButtonEnabledStateFlow.collectAsState().value
 
@@ -76,8 +76,7 @@ fun ApiScreen(
                 modifier = Modifier.fillMaxWidth(),
                 value = apiKey,
                 onValueChange = {
-                    apiKey = it
-                    viewModel.updateApiKey(apiKey)
+                    viewModel.updateApiKey(it)
                 } ,
 
                 placeholder = { Text(text = "e.g. Hexamine") },
@@ -92,8 +91,7 @@ fun ApiScreen(
                 modifier = Modifier.fillMaxWidth(),
                 value = privateKey,
                 onValueChange = {
-                    privateKey = it
-                    viewModel.updatePrivateKey(privateKey)
+                    viewModel.updatePrivateKey(it)
                 },
                 placeholder = { Text(text = "e.g. Hexamine") },
             )
