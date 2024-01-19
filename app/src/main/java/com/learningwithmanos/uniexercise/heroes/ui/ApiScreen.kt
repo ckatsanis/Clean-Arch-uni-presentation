@@ -101,7 +101,7 @@ fun ApiScreen(
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = apiKey,
-                onValueChange = { viewModel.updateApiKey(apiKey) },
+                onValueChange = { viewModel.apiKeyStateFlow.toString() } ,
                 placeholder = { Text(text = "e.g. Hexamine") },
             )
 
@@ -113,14 +113,14 @@ fun ApiScreen(
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = privateKey,
-                onValueChange = { viewModel.updatePrivateKey(privateKey) },
+                onValueChange = { viewModel.privateKeyStateFlow.value },
                 placeholder = { Text(text = "e.g. Hexamine") },
             )
 
             Button(
                 onClick = {
                     viewModel.setApi(apiKey, privateKey)
-                    onIconButtonPressed
+                    onIconButtonPressed.invoke()
                 },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = isButtonEnabled
@@ -131,7 +131,7 @@ fun ApiScreen(
             Button(
                 onClick = {
                     viewModel.fill(apiKey, privateKey)
-                    onIconButtonPressed
+                    onIconButtonPressed.invoke()
                     },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = true
