@@ -14,7 +14,7 @@ class MarvelRequestGenerator private constructor(){
     }
 
     val apiKey: String? = AppPreferences.apikey
-    val privateKey: String? = AppPreferences.privatekey
+    private val privateKey: String? = AppPreferences.privatekey
     var timestamp :Long? = null
     var hash: String? = null
 

@@ -18,9 +18,9 @@ interface MarvelRepo  {
 class MarvelRepoImpl @Inject constructor() : MarvelRepo {
 
     override suspend fun getData(): MarvelCharacterResponse {
-        var response: MarvelCharacterResponse = MarvelCharacterResponse(0, "", HeroData(listOf()))
+        var response = MarvelCharacterResponse(0, "", HeroData(listOf()))
         try {
-            var params = MarvelRequestGenerator.createParams()
+            val params = MarvelRequestGenerator.createParams()
             response = client.getCharacters(
                 params.timestamp,
                 params.apiKey,

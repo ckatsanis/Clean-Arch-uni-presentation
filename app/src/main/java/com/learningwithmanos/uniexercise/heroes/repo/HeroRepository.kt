@@ -1,6 +1,5 @@
 package com.learningwithmanos.uniexercise.heroes.repo
 
-import android.util.Log
 import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.source.local.HeroLocalSource
 import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSource

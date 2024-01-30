@@ -4,8 +4,6 @@ import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.data.RHero
 import com.learningwithmanos.uniexercise.heroes.response.MarvelCharacterResponse
 import com.learningwithmanos.uniexercise.heroes.source.local.Converters
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 /**
@@ -25,20 +23,19 @@ class HeroRemoteSourceImpl @Inject constructor(
 ): HeroRemoteSource {
     override suspend fun getHeroes(): List<Hero> {
         val response: MarvelCharacterResponse = restApi.getData()
-        var hero: List<Hero> = listOf()
 
-        if (response.code == 200) {
-            hero = response.data.results.map {
+        val hero: List<Hero> = if (response.code == 200) {
+            response.data.results.map {
                 it.mapToHero()
             }
         } else {
-            hero = listOf()
+            listOf()
         }
 
         return hero
     }
 
-    fun RHero.mapToHero() = Hero (
+    private fun RHero.mapToHero() = Hero (
         id = this.id,
         name = this.name,
         availableComics = this.availableComics.availableComics,

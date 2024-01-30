@@ -4,10 +4,6 @@ import android.util.Log
 import com.learningwithmanos.uniexercise.AppPreferences
 import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.data.LHero
-import com.learningwithmanos.uniexercise.heroes.ui.ApiViewModel
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -76,14 +72,14 @@ class HeroLocalSourceImpl @Inject constructor(private val marvelDao : MarvelDao)
         }
     }
 
-    fun LHero.mapToHero() = Hero (
+    private fun LHero.mapToHero() = Hero (
         id = this.id,
         name = this.name,
         availableComics = this.availableComics,
         imageUrl = this.imageUrl
     )
 
-    fun Hero.mapToLHero() = LHero (
+    private fun Hero.mapToLHero() = LHero (
         id = this.id,
         name = this.name,
         availableComics = this.availableComics,

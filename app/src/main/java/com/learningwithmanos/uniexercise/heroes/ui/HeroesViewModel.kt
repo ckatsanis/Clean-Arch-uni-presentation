@@ -1,26 +1,18 @@
 package com.learningwithmanos.uniexercise.heroes.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.learningwithmanos.uniexercise.heroes.data.Hero
 import com.learningwithmanos.uniexercise.heroes.data.Tab
-import com.learningwithmanos.uniexercise.heroes.repo.HeroRepository
-import com.learningwithmanos.uniexercise.heroes.response.MarvelCharacterResponse
-import com.learningwithmanos.uniexercise.heroes.source.local.HeroLocalSource
-import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSource
-import com.learningwithmanos.uniexercise.heroes.source.remote.HeroRemoteSourceImpl
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesSortedByHighestNumberOfComicsUC
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesSortedByNameUC
 import com.learningwithmanos.uniexercise.heroes.usecase.GetHeroesUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
@@ -82,22 +74,10 @@ data class HeroTileModel(
     val imageUrl: String,
 )
 
-data class StatusModel(
-    val code: Int,
-    val status: String,
-)
-
 fun Hero.mapHeroToHeroTileModel(): HeroTileModel {
     return HeroTileModel(
-        title = "$name, comics - ${availableComics}",
+        title = "$name, comics - $availableComics",
         imageUrl = imageUrl// image view are implemented with coil jc
     )
 }
 
-fun MarvelCharacterResponse.ToResponse() : StatusModel {
-    Log.d("API RESPONSE", "ToResponse: ${code} and $status")
-    return StatusModel(
-        code = code,
-        status = status
-    )
-}
