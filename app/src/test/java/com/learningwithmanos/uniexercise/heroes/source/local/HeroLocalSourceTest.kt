@@ -1,5 +1,6 @@
 package com.learningwithmanos.uniexercise.heroes.source.local
 
+import com.learningwithmanos.uniexercise.AppPreferences
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -13,6 +14,7 @@ class HeroLocalSourceImplTest {
     private lateinit var heroLocalSourceImpl: HeroLocalSourceImpl
 
     private val marvelDao : MarvelDao = mock()
+    private val appPreferences: AppPreferences = mock()
 
 
     @Before
@@ -47,6 +49,33 @@ class HeroLocalSourceImplTest {
 
         // then
         verify(marvelDao).getAllHeroes()
+    }
+
+    @Test
+    fun `test Fill`() = runTest {
+        appPreferences.apikey = "0cf69d45e2482a87f2a9af138efba603"
+        appPreferences.privatekey = "8aa649a8b299924f9428f6db08189950b7bfd728"
+
+        // Act
+        (heroLocalSourceImpl.fill("0cf69d45e2482a87f2a9af138efba603", "8aa649a8b299924f9428f6db08189950b7bfd728"))
+
+        verify(appPreferences).apikey = "0cf69d45e2482a87f2a9af138efba603"
+        verify(appPreferences).privatekey = "8aa649a8b299924f9428f6db08189950b7bfd728"
+    }
+
+    @Test
+    fun `test Setapi`() = runTest {
+        appPreferences.apikey = "0cf69d45e2482a87f2a9af138efba603"
+        appPreferences.privatekey = "8aa649a8b299924f9428f6db08189950b7bfd728"
+
+        val api = "s"
+        val private = "s"
+
+        // Act
+        heroLocalSourceImpl.setApi(api, private)
+
+        verify(appPreferences).apikey = api
+        verify(appPreferences).privatekey = private
     }
 
 }
