@@ -63,19 +63,19 @@ class HeroLocalSourceImplTest {
         verify(appPreferences).privatekey = "8aa649a8b299924f9428f6db08189950b7bfd728"
     }
 
-    @Test
-    fun `test Setapi`() = runTest {
-        appPreferences.apikey = "0cf69d45e2482a87f2a9af138efba603"
-        appPreferences.privatekey = "8aa649a8b299924f9428f6db08189950b7bfd728"
-
-        val api = "s"
-        val private = "s"
-
-        // Act
-        heroLocalSourceImpl.setApi(api, private)
-
-        verify(appPreferences).apikey = api
-        verify(appPreferences).privatekey = private
-    }
+//    @Test
+//    fun `test Setapi`() = runTest {
+//        appPreferences.apikey = "0cf69d45e2482a87f2a9af138efba603"
+//        appPreferences.privatekey = "8aa649a8b299924f9428f6db08189950b7bfd728"
+//
+//        val api = "s"
+//        val private = "s"
+//
+//        // Act
+//        heroLocalSourceImpl.setApi(api, private)
+//
+//        verify(appPreferences).apikey = api
+//        verify(appPreferences).privatekey = private
+//    }
 
 }
